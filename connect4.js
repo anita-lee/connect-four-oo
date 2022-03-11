@@ -6,22 +6,23 @@
  */
 
 
-
-
-/** makeBoard: create in-JS board structure:
+class Game {
+  constructor (width = 7, height = 6) {
+    this.width = width;
+    this.height = height; 
+    this.board = []; // array of rows, each row is array of cells  (board[y][x])
+    this.currPlayer = 1; // active player: 1 or 2
+    this.makeBoard(); 
+    this.makeHtmlBoard(); 
+  }
+  
+  /** makeBoard: create in-JS board structure:
  *   board = array of rows, each row is array of cells  (board[y][x])
  */
 
-class Game {
-  constructor () {
-    this.width = 7;
-    this.height = 6; 
-    this.board = []; // array of rows, each row is array of cells  (board[y][x])
-    this.currPlayer = 1; // active player: 1 or 2
-  }
-
-  makeBoard() {                           //how to check this? 
+  makeBoard() {          
    for (let y = 0; y < this.height; y++) {
+    console.log("this =", this); 
     let row = Array.from({ length: this.width }); 
     this.board.push(row);
     }
@@ -30,12 +31,13 @@ class Game {
 /** makeHtmlBoard: make HTML table and row of column tops. */
 
   makeHtmlBoard() {
+    console.log("this =", this); 
     const board = document.getElementById('board');
 
     // make column tops (clickable area for adding a piece to that column)
     const top = document.createElement('tr');
     top.setAttribute('id', 'column-top');
-    top.addEventListener('click', this.handleClick);
+    top.addEventListener('click', this.handleClick.bind(this));
 
     for (let x = 0; x < this.width; x++) {
       const headCell = document.createElement('td');
@@ -121,11 +123,11 @@ class Game {
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
 
   checkForWin() {
-    function _win(cells) {
+    let _win = (cells) => {
       // Check four cells to see if they're all color of current player
       //  - cells: list of four (y, x) cells
       //  - returns true if all are legal coordinates & all match currPlayer
-
+      console.log("this =", this); 
       return cells.every(
         ([y, x]) =>
           y >= 0 &&
@@ -152,7 +154,6 @@ class Game {
       }
     }
   }
-  let newGame = this.makeBoard(); 
 }
 
 new Game(); 
